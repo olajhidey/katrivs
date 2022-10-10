@@ -1,6 +1,6 @@
 # Katrivs Project 
 
-Source code for the Katrivs project which is a clone like version of Kahoot using SignalWire Chat Messaging SDK
+Source code for the Katrivs project which is a clone like version of Kahoot using SignalWire Chat SDK
 
 ## Description
 
