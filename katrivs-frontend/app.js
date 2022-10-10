@@ -78,7 +78,21 @@ function loadPlayground(gameCode, user) {
 
         const content = JSON.parse(message.content)
 
+        let time = 10
+
+        let clock = setInterval(function () {
+            time = time - 1
+            document.getElementById("timer").innerHTML = time
+    
+            if (time < 0) {
+                clearInterval(clock)
+                time = 10;
+                document.getElementById("timer").innerHTML = "0"
+            }
+        }, 1000)
+
         if (content.status === "ended") {
+            clearInterval(clock)
             loadResult()
         } else {
             console.log(content)
@@ -93,18 +107,7 @@ function loadPlayground(gameCode, user) {
 
         }
 
-        let time = 10
-
-        let clock = setInterval(function () {
-            time = time - 1
-            document.getElementById("timer").innerHTML = time
-    
-            if (time < 0) {
-                clearInterval(clock)
-                time = 10;
-                document.getElementById("timer").innerHTML = "0"
-            }
-        }, 1000)
+       
     })
 
     let time = 10
@@ -132,6 +135,9 @@ function selectAnswer(selected){
         score = score + 10
         console.log("you got this right")
     }else{
+        if(score >= 10){
+            score = score - 10
+        }
         console.log("wrong answer")
     }
 }

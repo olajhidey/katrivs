@@ -56,32 +56,31 @@
             content: "start"
         })
 
-        let i = 1;
+        let i = 0;
         let questions = data.questions
 
-        // await gameClient.publish({
-        //     channel: code,
-        //     content: JSON.stringify(questions[0])
-        // })
+        console.log("starting interval")
+        let timer = setInterval(async function () {
+            if (i !== questions.length) {
+                await gameClient.publish({
+                    channel: code,
+                    content: JSON.stringify(questions[i++])
+                })
 
-        // let timer = setInterval(async function() {
-        //
-        //     await gameClient.publish({
-        //         channel: code,
-        //         content: JSON.stringify(questions[i++])
-        //     })
-        //
-        //     // if(i === questions.length){
-        //     //     clearInterval(timer)
-        //     //     await gameClient.publish({
-        //     //         channel: code,
-        //     //         content: JSON.stringify({
-        //     //             status: "ended"
-        //     //         })
-        //     //     })
-        //     // }
-        //
-        // }, 10000)
+                console.log(i, new Date().toLocaleTimeString())
+
+            } else {
+                console.log("ending interval", new Date().toLocaleTimeString())
+                await gameClient.publish({
+                    channel: code,
+                    content: JSON.stringify({
+                        status: "ended"
+                    })
+                })
+                clearInterval(timer)
+            }
+
+        }, 10000)
 
         console.log("-----Game has started------")
 
