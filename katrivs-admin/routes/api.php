@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
-use App\Http\Controllers\PlaygroundController;
+use App\Http\Controllers\LeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +24,7 @@ Route::get("/games/{id}", [GameController::class , 'games']);
 Route::post("/player/{id}", [GameController::class, 'start_game']);
 Route::post("/player/save/{id}", [GameController::class, 'save_player']);
 Route::put("/player/{id}", [GameController::class, "update_game"]);
+
+//players
+Route::post("/board/create", [LeaderboardController::class, "create_board"]);
+Route::get("/boards/{gameCode}", [LeaderboardController::class, "get_board"]);

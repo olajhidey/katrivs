@@ -1,7 +1,6 @@
 const app = document.getElementById("app");
 let answer = ""
 
-
 async function loadOnboard() {
     app.innerHTML = document.getElementById("onboard").innerHTML
     let username = app.querySelector("#username")
@@ -53,8 +52,12 @@ function loadWaitingRoom(user, gameCode) {
     window.gameClient = gameClient;
 
     gameClient.on("message", (message) => {
-        if (message.content === "start") {
-            loadPlayground(gameCode, user)
+        let response = JSON.parse(message.content)
+
+        game_id = response.game_id
+
+        if (response.start) {
+            loadPlayground(gameCode, user, response.game_id)
         }
     })
 
@@ -63,7 +66,7 @@ function loadWaitingRoom(user, gameCode) {
 
 }
 
-function loadPlayground(gameCode, user) {
+async function loadPlayground(gameCode, user, game_id) {
 
     app.innerHTML = document.getElementById("playground").innerHTML
 
@@ -74,7 +77,7 @@ function loadPlayground(gameCode, user) {
 
     window.gameClient = gameClient;
 
-    gameClient.on("message", (message) => {
+    await gameClient.on("message", (message) => {
 
         const content = JSON.parse(message.content)
 
@@ -93,21 +96,18 @@ function loadPlayground(gameCode, user) {
 
         if (content.status === "ended") {
             clearInterval(clock)
+            console.log(game_id)
+            saveScore(gameCode, game_id)
             loadResult()
         } else {
             console.log(content)
-
             document.getElementById("question").innerHTML = content.name
             document.getElementById("option1").innerHTML = content.option1
             document.getElementById("option2").innerHTML = content.option2
             document.getElementById("option3").innerHTML = content.option3
             document.getElementById("option4").innerHTML = content.option4
-
             answer = content.answer
-
         }
-
-       
     })
 
     let time = 10
@@ -142,10 +142,37 @@ function selectAnswer(selected){
     }
 }
 
-function loadResult() {
-    console.log(score)
-    app.innerHTML = document.getElementById("result").innerHTML
+// load the get result template
+async function loadResult() {
     
+    app.innerHTML = document.getElementById("result").innerHTML
+    console.log(score)
+    let response = await loadLeaderBoard()
+    console.log(response)
+    
+}
+
+// Get list of users and their scores
+async function loadLeaderBoard(){
+    const code = window.localStorage.getItem("gameCode")
+    const request = await axios.get(`http://127.0.0.1:8000/api/boards/${code}`)
+    console.log(request.data)
+    return request.data.data
+}
+
+// Save score to leaderboard function
+async function saveScore(gameCode, game_id){
+    let username = window.localStorage.getItem("username")
+    
+    let request = await axios.post("http://127.0.0.1:8000/api/board/create", {
+        game_id: game_id,
+        game_code: gameCode,
+        score: score,
+        username: username
+    })
+
+    console.log(request.data)
+
 }
 
 loadOnboard()

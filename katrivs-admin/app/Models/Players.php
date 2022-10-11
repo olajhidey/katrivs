@@ -9,7 +9,7 @@ class Players extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["username", "score", "game_id"];
+    protected $fillable = ["username", "score", "game_id", "game_code"];
 
     public function game_history(){
         return $this->belongsTo(GameHistory::class);

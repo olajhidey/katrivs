@@ -53,7 +53,10 @@
 
         const game = await gameClient.publish({
             channel: code,
-            content: "start"
+            content: JSON.stringify({
+                start: true,
+                game_id: data.game.id
+            })
         })
 
         let i = 0;

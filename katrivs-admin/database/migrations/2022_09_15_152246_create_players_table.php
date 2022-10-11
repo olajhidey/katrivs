@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('players', function (Blueprint $table) {
             $table->id();
             $table->string("game_id");
+            $table->string("game_code");
             $table->string("score");
             $table->string("username");
             $table->timestamps();
