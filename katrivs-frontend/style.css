@@ -1,5 +1,12 @@
-#onboard, .container{
-    max-width:400px; 
+#onboard,
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#box div{
     margin: auto;
-    margin-top: 150px;
+    width:400px; 
 }

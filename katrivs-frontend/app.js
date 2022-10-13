@@ -96,16 +96,28 @@ async function loadPlayground(gameCode, user, game_id) {
 
         if (content.status === "ended") {
             clearInterval(clock)
-            console.log(game_id)
             saveScore(gameCode, game_id)
             loadResult()
         } else {
-            console.log(content)
+    
             document.getElementById("question").innerHTML = content.name
             document.getElementById("option1").innerHTML = content.option1
             document.getElementById("option2").innerHTML = content.option2
-            document.getElementById("option3").innerHTML = content.option3
-            document.getElementById("option4").innerHTML = content.option4
+
+            if(content.option3 == null){
+                document.getElementById("option3").style.display = "none"
+            }else{
+                document.getElementById("option3").style.display = "block"
+                document.getElementById("option3").innerHTML = content.option3
+            }
+
+            if(content.option4 == null){
+                document.getElementById("option4").style.display = "none"
+            }else{
+                document.getElementById("option4").style.display = "block"
+                document.getElementById("option4").innerHTML = content.option4
+            }
+
             answer = content.answer
         }
     })
@@ -144,19 +156,27 @@ function selectAnswer(selected){
 
 // load the get result template
 async function loadResult() {
-    
     app.innerHTML = document.getElementById("result").innerHTML
     console.log(score)
-    let response = await loadLeaderBoard()
-    console.log(response)
-    
+    setTimeout(async function(){
+        let response = await loadLeaderBoard()
+
+        let list = document.getElementById("list");
+
+        response.forEach(element => {
+            let html = ""
+            html = "<tr><td>"+ element.username + "</td><td>"+ element.score + "</td></tr>"
+            list.innerHTML += html
+        });
+
+    }, 7000)
+
 }
 
 // Get list of users and their scores
 async function loadLeaderBoard(){
     const code = window.localStorage.getItem("gameCode")
     const request = await axios.get(`http://127.0.0.1:8000/api/boards/${code}`)
-    console.log(request.data)
     return request.data.data
 }
 
