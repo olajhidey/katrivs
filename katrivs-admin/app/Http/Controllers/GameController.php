@@ -81,7 +81,7 @@ class GameController extends Controller
         $item = GameHistory::where("code", $code)->first();
 
         if($item){
-            return response()->json(["message" => "Game already ended. Start a new game"]);
+            return response()->json(["success"=> false, "message" => "Game already ended. Start a new game"]);
         }
 
         $start = GameHistory::create([
@@ -90,7 +90,7 @@ class GameController extends Controller
             'trivia_id'=> $id
         ]);
 
-        return response()->json(["message" => "Item saved successfully"]);
+        return response()->json(["success"=> true, "message" => "Item saved successfully"]);
     }
 
     public function save_game($id, Request $request){

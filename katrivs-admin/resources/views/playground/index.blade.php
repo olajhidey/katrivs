@@ -29,67 +29,73 @@
 
     async function start(code, id) {
 
+        // Get Questions from the database
         const data = await getQuestions(id)
 
+        // save the gameId and the code to the database
         const started = await saveGameHistory(code, id)
 
-        console.log(started)
-
-        console.log(data)
-
-        const url = "https://token-gen.azurewebsites.net/api/GenToken"
-        const request = await axios.post(url, {
-            username: "admin",
-            code: code
-        })
-
-        const token = request.data.token
-
-        const gameClient = new SignalWire.Chat.Client({
-            token: token
-        })
-
-        window.gameClient = gameClient;
-
-        const game = await gameClient.publish({
-            channel: code,
-            content: JSON.stringify({
-                start: true,
-                game_id: data.game.id
+        if(started.success){
+            // Generate token to get started with the Chat sdk
+            const url = "https://token-gen.azurewebsites.net/api/GenToken"
+            const request = await axios.post(url, {
+                username: "admin",
+                code: code
             })
-        })
 
-        let i = 0;
-        let questions = data.questions
+            // Get token from the request
+            const token = request.data.token
 
-        console.log("starting interval")
-        let timer = setInterval(async function () {
-            if (i !== questions.length) {
-                await gameClient.publish({
-                    channel: code,
-                    content: JSON.stringify(questions[i++])
+            // Intialize Game client object
+            const gameClient = new SignalWire.Chat.Client({
+                token: token
+            })
+
+            // append gameclient to the window object
+            window.gameClient = gameClient;
+
+            // publish the game has started to the front end
+            const game = await gameClient.publish({
+                channel: code,
+                content: JSON.stringify({
+                    start: true,
+                    game_id: data.game.id
                 })
+            })
 
-                console.log(i, new Date().toLocaleTimeString())
+            let i = 0;
+            let questions = data.questions
 
-            } else {
-                console.log("ending interval", new Date().toLocaleTimeString())
-                await gameClient.publish({
-                    channel: code,
-                    content: JSON.stringify({
-                        status: "ended"
+            // set interval to publish trivia questions to users
+            let timer = setInterval(async function(){
+
+                if (i !== questions.length) {
+                    console.log(i, new Date().toLocaleTimeString())
+                    await gameClient.publish({
+                        channel: code,
+                        content: JSON.stringify(questions[i++])
                     })
-                })
-                clearInterval(timer)
-            }
 
-        }, 10000)
+                } else {
+                    console.log("ending interval", new Date().toLocaleTimeString())
+                    await gameClient.publish({
+                        channel: code,
+                        content: JSON.stringify({
+                            status: "ended"
+                        })
+                    })
 
-        console.log("-----Game has started------")
+                    const ended = await gameEnded(code, id)
+                    console.log(ended)
+                    console.log("-----------Game has ended----------")
+                    clearInterval(timer)
+                }
 
-        const ended = await gameEnded(code, id)
-        console.log(ended)
-        console.log("----- Game has ended--------")
+            }, 10000)
+
+        }else{
+            alert("Game has ended. Try generating a new code")
+        }
     }
 
     async function getQuestions(id) {
