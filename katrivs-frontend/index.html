@@ -31,7 +31,9 @@
     <!-- Getting started -->
     <template id="onboard">
       <div class="container">
-        <div id="box">
+        
+        <div id="box" class="nes-container is-centered">
+          <h1 style="margin-top: 20px; margin-bottom: 20px;">Katrivs!<i class="snes-logo"></i></h1>
           <div class="nes-field">
             <label for="username" style="text-align: center">Username</label>
             <input
@@ -60,22 +62,34 @@
     <!-- End of Getting started -->
 
     <template id="waitingRoom">
-      <div
-        style="margin: auto; max-width: 800px; padding: 20px; height: 400px"
-        class="nes-container with-title is-centered"
-      >
-        <img
-          src="travolta.gif"
-          width="400px"
-          height="250px"
-          style="margin: auto"
-        /><br />
-        <h3 style="margin-top: 20px">Waiting for others to join the game</h3>
+      <div class="container">
+        <div id="waiting" class="nes-container with-title is-centered">
+          <img
+            src="travolta.gif"
+            width="400px"
+            height="250px"
+            style="margin: auto"
+          /><br />
+          <h3 style="margin-top: 20px">Waiting for others to join the game</h3>
+        </div>
       </div>
     </template>
 
     <template id="playground">
+
+      <div>
+        <div
+        id="starter"
+        class="nes-container with-title is-centered"
+      >
+        <p>Game starts in</p>
+        <p id="clock"></p>
+      </div>
+      </div>
+     
+
       <div
+        id="playCanva"
         style="
           max-width: 900px;
           margin: 50px auto;
@@ -100,62 +114,58 @@
           <p id="question"></p>
         </div>
 
-        <div class="content-option" style="margin-top: 50px">
-          <table style="width: 100%">
-            <tbody>
-              <tr>
-                <td style="text-align: center">
-                  <button
-                    type="button"
-                    style="width: 300px; height: 150px"
-                    onclick="selectAnswer('option1')"
-                    class="nes-btn is-primary"
-                    id="option1"
-                  ></button>
-                </td>
-                <td style="text-align: center">
-                  <button
-                    type="button"
-                    style="width: 300px; height: 150px"
-                    onclick="selectAnswer('option2')"
-                    class="nes-btn is-primary"
-                    id="option2"
-                  ></button>
-                </td>
-              </tr>
+        <div class="countdown">
+          <p></p>
+        </div>
 
-              <tr style="margin-top: 50px">
-                <td style="text-align: center">
-                  <button
-                    type="button"
-                    style="width: 300px; height: 150px"
-                    onclick="selectAnswer('option3')"
-                    class="nes-btn is-primary"
-                    id="option3"
-                  ></button>
-                </td>
-                <td style="text-align: center">
-                  <button
-                    type="button"
-                    style="width: 300px; height: 150px"
-                    onclick="selectAnswer('option4')"
-                    class="nes-btn is-primary"
-                    id="option4"
-                  ></button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="content-option" style="margin-top: 50px">
+          <div class="row">
+            <div class="column">
+              <button
+                type="button"
+                style="width: 300px; height: 150px; display: none; margin: 10px;"
+                onclick="selectAnswer('option1')"
+                class="nes-btn is-primary"
+                id="option1"
+              ></button>
+              <button
+                type="button"
+                style="width: 300px; height: 150px; display: none; margin: 10px;"
+                onclick="selectAnswer('option2')"
+                class="nes-btn is-primary"
+                id="option2"
+              ></button>
+            </div>
+            <div class="column">
+              <button
+                type="button"
+                style="width: 300px; height: 150px; display: none; margin: 10px;"
+                onclick="selectAnswer('option3')"
+                class="nes-btn is-primary"
+                id="option3"
+              ></button>
+              <button
+                type="button"
+                style="width: 300px; height: 150px; display: none; margin: 10px;"
+                onclick="selectAnswer('option4')"
+                class="nes-btn is-primary"
+                id="option4"
+              ></button>
+            </div>
+          </div>
         </div>
       </div>
     </template>
 
     <template id="result">
       <div
-        style="margin: auto; max-width: 800px"
+        style="margin: 50px auto; max-width: 800px"
         class="nes-table-responsive nes-container with-title is-centered"
       >
         <h3>LeaderBoard</h3>
+        <br />
+        <p id="loader" style="text-align: center">Gathering results...</p>
+        <br />
         <table style="width: 100%" class="nes-table">
           <thead>
             <th>Username</th>
