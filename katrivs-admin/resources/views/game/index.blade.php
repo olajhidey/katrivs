@@ -12,7 +12,7 @@
                 <h3>{{ $game->title }}</h3>
                 <p>{{ $game->description }}</p>
 
-                <a class="btn btn-secondary" href="{{route('question', ['id'=> $game->id])}}">Add Questions</a> | <a class="btn btn-info" href="{{ route('game.view', ['id' => $game->id]) }}">View game</a> | <a class="btn btn-success" href="">Start game</a>
+                <a class="btn btn-secondary btn-sm" href="{{route('question', ['id'=> $game->id])}}">Add Questions</a> | <a class="btn btn-info btn-sm" href="{{ route('game.view', ['id' => $game->id]) }}">View game</a> | <a class="btn btn-success btn-sm" href="">Start game</a>
             </div>
         @endforeach
 

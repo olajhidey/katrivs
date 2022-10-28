@@ -17,7 +17,7 @@
 
 </div>
 
-<script src="https://unpkg.com/@signalwire/js@3.8.0"></script>
+<script src="https://cdn.signalwire.com/@signalwire/js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
@@ -37,7 +37,7 @@
 
         if(started.success){
             // Generate token to get started with the Chat sdk
-            const url = "https://token-gen.azurewebsites.net/api/GenToken"
+            const url = "https://tokenizerfunc.azurewebsites.net/api/genToken"
             const request = await axios.post(url, {
                 username: "admin",
                 code: code

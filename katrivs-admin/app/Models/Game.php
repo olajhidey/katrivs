@@ -14,4 +14,8 @@ class Game extends Model
     public function questions(){
         return $this->hasMany(Question::class);
     }
+
+    public function history(){
+        return $this->hasMany(GameHistory::class);
+    }
 }

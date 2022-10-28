@@ -1,7 +1,7 @@
 const app = document.getElementById("app");
 let answer = ""
 let local = "http://127.0.0.1:8000/api/"
-let tunnel = "https://ce00-102-89-46-196.ngrok.io/api/"
+let tunnel = "https://7c59-102-89-23-131.ngrok.io/api/"
 
 async function loadOnboard() {
     app.innerHTML = document.getElementById("onboard").innerHTML
@@ -10,7 +10,6 @@ async function loadOnboard() {
 
     app.querySelector("button").addEventListener("click", (e) => {
 
-        console.log("clicked!")
         e.preventDefault()
         let user = username.value
         let gameCode = code.value
@@ -30,14 +29,13 @@ async function loadOnboard() {
             return
         }
 
-        const request = axios.post("https://token-gen.azurewebsites.net/api/GenToken", {
+        const request = axios.post("https://tokenizerfunc.azurewebsites.net/api/genToken", {
             username: user,
             code: gameCode
         }).then((res) => {
             window.localStorage.setItem("token", res.data.token)
             window.localStorage.setItem("username", user)
             window.localStorage.setItem("gameCode", gameCode)
-            console.log(res)
             loadWaitingRoom(user, gameCode)
         })
     })
@@ -78,7 +76,6 @@ async function loadPlayground(gameCode, user, game_id) {
     let clock = setInterval(function () {
         time = time - 1
         document.getElementById("clock").innerHTML = time
-        console.log(time)
 
         if (time == 0) {
             document.getElementById("starter").style.display = "none"
@@ -97,7 +94,11 @@ async function loadPlayground(gameCode, user, game_id) {
 
     await gameClient.on("message", async (message) => {
 
+        document.getElementById("answer").style.display = "none"; 
+        
         const content = JSON.parse(message.content)
+
+        document.getElementById("answer").innerHTML = "Answer: " + content.answer; 
 
         let option1 = document.getElementById("option1")
         let option2 = document.getElementById("option2")
@@ -147,8 +148,6 @@ async function loadPlayground(gameCode, user, game_id) {
             loadResult()
         } else {
 
-            console.log(content)
-
             // document.getElementById("option2").style.display = "block"
 
             document.getElementById("question").innerHTML = content.name
@@ -196,6 +195,8 @@ let score = 0;
 function selectAnswer(selected) {
     let choice = document.getElementById(selected).innerText
 
+    document.getElementById("answer").style.display = "block"; 
+
     let option1 = document.getElementById("option1")
     let option2 = document.getElementById("option2")
     let option3 = document.getElementById("option3")
@@ -214,27 +215,25 @@ function selectAnswer(selected) {
     option4.classList.add("is-disabled")
  
 
-
     if (choice.toLowerCase() === answer.toLowerCase()) {
         score = score + 10
-        console.log("you got this right")
     } else {
         if (score >= 10) {
             score = score - 10
         }
-        console.log("wrong answer")
     }
 }
 
 // load the get result template
 async function loadResult() {
     app.innerHTML = document.getElementById("result").innerHTML
-    console.log(score)
     setTimeout(async function () {
         let response = await loadLeaderBoard()
 
         let list = document.getElementById("list");
         document.getElementById("loader").style.display = "none"
+
+        console.log(response)
 
         response.forEach(element => {
             let html = ""
@@ -263,9 +262,6 @@ async function saveScore(gameCode, game_id) {
         score: score,
         username: username
     })
-
-    console.log(request.data)
-
 }
 
 loadOnboard()

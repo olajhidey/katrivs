@@ -34,5 +34,6 @@ Route::get("/question/edit/{id}", [GameController::class, 'edit_question'])->nam
 Route::post("/question/save/{id}", [GameController::class, 'save_edit'])->name("question.save");
 
 // PlayGround
-
 Route::get("/playground/{triviaId}", [PlaygroundController::class, "index"])->name("playground");
+Route::get("/players/view/{code}", [PlaygroundController::class, "view"])->name("play.view");
+Route::get("/game/remove/{code}", [GameController::class, 'remove'])->name("game.remove");

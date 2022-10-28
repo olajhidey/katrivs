@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GameHistory;
+use App\Models\Players;
 use Illuminate\Http\Request;
 use App\Models\Game;
 
@@ -14,4 +16,11 @@ class PlaygroundController extends Controller
 
         return view("playground.index", ['trivia'=> $trivia, 'code' => $gameCode]);
     }
+
+    public function view($code){
+        $players = Players::where('game_code', $code)->get()->sortBy("score", SORT_REGULAR, true);
+        return view("playground.view", ['players' => $players]);
+    }
+
+
 }

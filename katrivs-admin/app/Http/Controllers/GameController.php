@@ -36,7 +36,9 @@ class GameController extends Controller
     }
 
     public function view_game($id){
-        return view('question.view', ['game' => Game::find($id)]);
+
+        $history = GameHistory::where('trivia_id', $id)->get()->sortDesc();
+        return view('question.view', ['game' => Game::find($id), 'histories' => $history]);
     }
 
     public function get_question($id){
@@ -69,6 +71,7 @@ class GameController extends Controller
     }
 
     public function games($id){
+
         $response = array("game" => Game::find($id), "questions"=> Game::find($id)->questions );
 
         return response()->json($response);
@@ -148,4 +151,15 @@ class GameController extends Controller
 
         return redirect()->route('game.view', ['id' => $question->game_id]);
     }
+
+    public function remove($code){
+        $history = GameHistory::where("code", $code)->first();
+        $players = Players::where("code", $code);
+
+        $players->delete();
+        $history->delete();
+
+        return redirect()->back();
+    }
+
 }

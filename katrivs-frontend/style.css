@@ -62,3 +62,7 @@
 #clock{
   font-size: 50px;
 }
+
+#answer{
+  display: none;
+}

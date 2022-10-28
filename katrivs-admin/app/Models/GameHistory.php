@@ -15,4 +15,8 @@ class GameHistory extends Model
     function players(){
         return $this->hasMany(Players::class);
     }
+
+    function game(){
+        return $this->hasMany(Game::class);
+    }
 }

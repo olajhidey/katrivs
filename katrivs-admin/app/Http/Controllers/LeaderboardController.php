@@ -22,11 +22,11 @@ class LeaderboardController extends Controller
 
     }
 
+    // Get the list of score for players based on a particular code
     function get_board($gameCode){
-
         $board = Players::where('game_code', $gameCode)->get();
-
-        return response()->json(["data"=> $board]);
+        $sorted = $board->sortBy("score", SORT_REGULAR, true)->values()->all();
+        return response()->json(["data"=> $sorted]);
 
     }
 }

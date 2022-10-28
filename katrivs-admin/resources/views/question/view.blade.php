@@ -42,7 +42,7 @@
 
                     @foreach($game->questions as $question)
                         <div class="question-item list-group-item">
-                            <h5>{{ $question->name }}</h5>
+                            <h5>{!! $question->name !!} </h5>
                             <div class="row">
                                 <div class="col-md-6 text-center">
                                     <p>{{ $question->option1  }}</p>
@@ -64,7 +64,8 @@
 
                             <a href="{{ route('question.edit', ['id' => $question->id]) }}"
                                class="btn btn-sm btn-primary">Edit</a> | <a
-                                href="{{ route('question.delete', ['id' => $question->id]) }}" class="btn btn-sm btn-danger">Delete</a>
+                                href="{{ route('question.delete', ['id' => $question->id]) }}"
+                                class="btn btn-sm btn-danger">Delete</a>
                         </div>
                         <br/>
                     @endforeach
@@ -74,8 +75,16 @@
             </div>
             <div class="tab-pane fade" id="history-tab-pane" role="tabpanel" aria-labelledby="history-tab"
                  tabindex="0">
-                <div class="container">
-                    <h1>History pane</h1>
+                <div class="container mt-3 mb-3">
+                    <h3>History pane</h3>
+                    <ul class="list-group">
+                        @foreach($histories as $history)
+                            <li class="list-group-item">
+                                <p><a href="{{ route("play.view", ['code' => $history->code]) }}">#{{ $history->code }}</a></p>
+                                <p>{{ $history->created_at}} <a style="float: right;" href="{{ route("game.remove", ["code" => $history->code]) }}" class="btn btn-sm btn-danger">Delete</a></p>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
 
